@@ -1,0 +1,9 @@
+# Site settings
+title: Style Guide
+description: > # this means to ignore newlines until "baseurl:"
+  FieldAware Coding Standards & Best Practices
+baseurl: "/style-guide" # the subpath of your site, e.g. /blog/
+url: "https://fieldaware.github.io" # the base hostname & protocol for your site
+
+# Build settings
+markdown: kramdown
