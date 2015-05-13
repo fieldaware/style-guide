@@ -7,13 +7,20 @@ title: Javascript
 
 One of the best comunity driven resources for coding standards is [Steve Kwan's best practices][steve-kwan-best-practices]. The recommended reading is excellent and it's well worth following the links therein.
 
-## Recommended Reading
+## Recommended Reading & Keynotes
 
 This one is already mentioned in [Steve Kwan's best practices][steve-kwan-best-practices] but is worth mentioning twice since:
 
 [Javascript - The Good Parts][javascript-the-good-parts] (Douglas Crockford's)
 
 [Learning Javascript Design Patterns][learning-javascript-design-patterns] (Addy Osmani)
+
+[Google v8 optimizations][google-v8-optimizations]
+
+Memory Management [keynote][memory-management-keynote] and [video][memory-management-video]
+
+[Javascript the better parts][js-better-parts] (Douglas Crockford)
+
 
 ## General Tips
 
@@ -32,7 +39,7 @@ This one is already mentioned in [Steve Kwan's best practices][steve-kwan-best-p
 
 - Minimize DOM manipulation, use an in memory DOM if necessary to minimize the performance issues related to DOM layout recalculation.
 - Use `lang.clone` just when it is strictly necessary, it can cause performance issues.
-- Minimize the number of delete statements in order to prevent performance issues:
+- Minimize the number of [delete statements][google-v8-optimizations] in order to prevent [performance issues][memory-management-keynote]:
 
   ``` javascript
   // Remove hidden classes...
@@ -41,11 +48,6 @@ This one is already mentioned in [Steve Kwan's best practices][steve-kwan-best-p
   // Use null set instead so the hidden classes are still valid.
   object.a = null;
   ```
-
-  Some links to understand the rule above:
-
-  1. [Google v8 optimizations][google-v8-optimizations].
-  2. Addy Osmani - Memory Management [keynote][memory-management-keynote] and [video][memory-management-video]
 
 
 ## Syntax
@@ -132,3 +134,4 @@ Object.keys(person).forEach(lang.hitch(this, function(prop){
 [package-control-install]:https://packagecontrol.io/installation
 [sublime-settings]:{{ site.baseurl }}{{ post.url }}/files/Preferences.sublime-settings
 [sublime-package-control]:{{ site.baseurl }}{{ post.url }}/files/PackageControl.sublime-settings
+[js-better-parts]:https://www.youtube.com/watch?v=PSGEjv3Tqo0
