@@ -112,7 +112,11 @@ Object.keys(person).forEach(lang.hitch(this, function(prop){
 
 - Initial Draft
 
-- Add more general tips.
+#### 2015.05.13
+
+- Add more general tips
+- Add performance gotchas
+- Add tools & settings
 
 <!-- links -->
 
