@@ -23,12 +23,15 @@ This one is already mentioned in [Steve Kwan's best practices][steve-kwan-best-p
 - Similarly, whenever possible, use native HTML5 widgets over framework widgets such as dojo's `dijit`. Only use other widgets when absolutely necessary and preferably instantiate those widgets programmatically.
 - Use [JSDoc3][jsdoc3] to document your code.
 - Write *TESTS*! Especially for your models.
-- Define your CSS at component level instead of page (and put each into it's own component file).
+- Define your CSS at component level instead of page (and put each into its own component file).
 - Use compass mixins instead of multiple rules with browser prefixes.
 - Don't use `parseOnLoad`, parse small page sections instead.
+
+
+## Performance Gotchas
+
 - Minimize DOM manipulation, use an in memory DOM if necessary to minimize the performance issues related to DOM layout recalculation.
 - Use `lang.clone` just when it is strictly necessary, it can cause performance issues.
-- Use the following [jshint file][jshint-file]
 - Minimize the number of delete statements in order to prevent performance issues:
 
   ``` javascript
@@ -91,6 +94,18 @@ Object.keys(person).forEach(lang.hitch(this, function(prop){
 });
 ```
 
+## Tools and configuration
+
+### Generic
+
+- [Jshint file][jshint-file]
+
+### Sublime Text
+
+- Package Control [installation][package-control-install]
+- Basic [Sublime Text User settings][sublime-settings]
+- Sublime Text [Package Control settings][sublime-package-control] with some nice packages to have.
+
 ### ChangeLog
 
 #### 2015.05.08
@@ -105,10 +120,11 @@ Object.keys(person).forEach(lang.hitch(this, function(prop){
 [memory-management-keynote]:https://speakerdeck.com/addyosmani/javascript-memory-management-masterclass
 [memory-management-video]:https://www.youtube.com/watch?v=LaxbdIyBkL0
 [steve-kwan-best-practices]:https://github.com/stevekwan/best-practices/blob/master/javascript/best-practices.md
-
 [javascript-the-good-parts]:http://javascript.crockford.com/
-
 [learning-javascript-design-patterns]:http://addyosmani.com/resources/essentialjsdesignpatterns/book/
-
 [jsdoc3]:https://github.com/jsdoc3/jsdoc
+
 [jshint-file]:{{ site.baseurl }}{{ post.url }}/files/jshintrc
+[package-control-install]:https://packagecontrol.io/installation
+[sublime-settings]:{{ site.baseurl }}{{ post.url }}/files/Preferences.sublime-settings
+[sublime-package-control]:{{ site.baseurl }}{{ post.url }}/files/PackageControl.sublime-settings
