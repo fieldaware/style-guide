@@ -5,6 +5,7 @@ layout: default
 
   <header class="post-header">
     <h1 class="post-title">{{ page.title }}</h1>
+    <div id="toc"></div>
   </header>
 
   <article class="post-content">
@@ -12,3 +13,10 @@ layout: default
   </article>
 
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="javascripts/toc.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#toc').toc();
+});
+</script>

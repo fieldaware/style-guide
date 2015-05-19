@@ -108,7 +108,7 @@ Object.keys(person).forEach(lang.hitch(this, function(prop){
 - Basic [Sublime Text User settings][sublime-settings]
 - Sublime Text [Package Control settings][sublime-package-control] with some nice packages to have.
 
-### ChangeLog
+## ChangeLog
 
 #### 2015.05.08
 
