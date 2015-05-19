@@ -30,7 +30,6 @@ Memory Management [keynote][memory-management-keynote] and [video][memory-manage
 - Similarly, whenever possible, use native HTML5 widgets over framework widgets such as dojo's `dijit`. Only use other widgets when absolutely necessary and preferably instantiate those widgets programmatically.
 - Use [JSDoc3][jsdoc3] to document your code.
 - Write *TESTS*! Especially for your models.
-- Define your CSS at component level instead of page (and put each into its own component file).
 - Use compass mixins instead of multiple rules with browser prefixes.
 - Don't use `parseOnLoad`, parse small page sections instead.
 
@@ -108,17 +107,42 @@ Object.keys(person).forEach(lang.hitch(this, function(prop){
 - Basic [Sublime Text User settings][sublime-settings]
 - Sublime Text [Package Control settings][sublime-package-control] with some nice packages to have.
 
+## CSS/SASS
+
+Define your CSS/SASS at component level instead of page (and put each into its own component file).
+
+Comments should on a line of their own (above the target line); not inline.
+
+```sass
+.country
+  font-size: 12pt
+  // This country has big borders. <-- good comment
+  border: 100px
+  margin: 0 // but no margins. <-- bad comment
+```
+
+Use [compass' mixins][compass-mixins] for cross-browser support:
+
+```sass
+.country
+  @include border-bottom-radius(50px)
+```
+
 ## ChangeLog
 
-#### 2015.05.08
+#### 2015.05.19
 
-- Initial Draft
+- Add css/sass section
 
 #### 2015.05.13
 
 - Add more general tips
 - Add performance gotchas
 - Add tools & settings
+
+#### 2015.05.08
+
+- Initial Draft
 
 <!-- links -->
 
@@ -129,6 +153,7 @@ Object.keys(person).forEach(lang.hitch(this, function(prop){
 [javascript-the-good-parts]:http://javascript.crockford.com/
 [learning-javascript-design-patterns]:http://addyosmani.com/resources/essentialjsdesignpatterns/book/
 [jsdoc3]:https://github.com/jsdoc3/jsdoc
+[compass-mixins]:http://compass-style.org/index/mixins/
 
 [jshint-file]:{{ site.baseurl }}{{ post.url }}/files/jshintrc
 [package-control-install]:https://packagecontrol.io/installation
