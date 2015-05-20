@@ -71,6 +71,23 @@ define([
 
 ### Loops: for(...) / while(...)
 
+#### arrays
+
+```javascript
+// Old style for loop
+for(var i = 0; i < data.length; i++) {
+    data[i].label = "This is element number " + i;
+}
+
+// New style. It avoids hoisting problems and avoids scope pollution
+// by keeping the "i" variable local to the body of the "loop".
+data.forEach(function(item, i) {
+    item.label = "This is element number " + i;
+});
+```
+
+#### objects
+
 ```javascript
 // Old style using actual loops
 for(var prop in person){
