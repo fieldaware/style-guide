@@ -114,24 +114,180 @@ Object.keys(person).forEach(lang.hitch(this, function(prop){
 
 ## CSS/SASS
 
-Define your CSS/SASS at component level instead of page (and put each into its own component file).
+### General
+
+We use [compass][compass], which in turn uses [sass][sass]
+
+#### Flexbox for Layout & Flow
+
+Forget about the standard box model; use flexbox. Compass provides [flexbox mixins][flexbox-mixins]. For a visual overview, see [CSS Tricks' flexbox guide][flexbox-guide].
+
+#### Cross-browser support
+
+Use [compass' mixins][compass-mixins] for cross-browser support:
+
+```sass
+#header
+  @include border-bottom-radius(50px)
+```
+
+#### Comments
 
 Comments should on a line of their own (above the target line); not inline.
 
 ```sass
-.country
+.fa-MyComponent
   font-size: 12pt
   // This country has big borders. <-- good comment
   border: 100px
   margin: 0 // but no margins. <-- bad comment
 ```
 
-Use [compass' mixins][compass-mixins] for cross-browser support:
+
+### Component & Widget styling: Naming conventions
+
+This naming convention relies on _structured class names_ and _meaningful hyphens_ (i.e., not
+using hyphens merely to separate words). This helps to work around the current
+limits of applying CSS to the DOM (i.e., the lack of style encapsulation), and
+to better communicate the relationships between classes.
+
+Migration to this architecture will take time and should be done whenever styles of compontents are worked on.
+
+#### Credit
+
+The following styles are heavily based on, and an adaption of the excellent [SUIT CSS naming conventions][suitcss-naming-conventions].
+
+### Components/Widgets
+
+Syntax: `[<namespace>-]<ComponentName>[--modifierName|-descendentName]`
+
+This has several benefits when reading and writing HTML and CSS/SASS:
+
+* It helps to distinguish between the classes for the root of the component,
+  descendent elements, and modifications.
+* It keeps the specificity of selectors low.
+* It helps to decouple presentation semantics from document semantics.
+
+Each component should be defined in their own SASS file.
+
+#### Namespace
+
+Custom components should be prefixed with the `fa` namespace. We want to avoid the potential for collisions between libraries and custom components by prefixing all components with a namespace.
 
 ```sass
-.country
-  @include border-bottom-radius(50px)
+.fa-Button
+  /* … */
+.fa-Tabs
+  /* … */
 ```
+
+This makes it clear, when reading the HTML, which components are part of your
+library.
+
+<a name="ComponentName"></a>
+#### ComponentName
+
+The component's name must be written in pascal case. Nothing else in the
+HTML/CSS uses pascal case.
+
+```sass
+.fa-MyComponent
+  /* … */
+```
+
+```html
+<article class="fa-MyComponent">
+  …
+</article>
+```
+
+<a name="ComponentName--modifierName"></a>
+#### ComponentName--modifierName
+
+A component modifier is a class that modifies the presentation of the base
+component in some form (for a certain configuration of the component).
+Modifier names must be written in camel case and be separated from the
+component name by two hyphens. The class should be included in the HTML _in
+addition_ to the base component class.
+
+```sass
+/* Core button */
+.fa-Button
+  /* … */
+/* Cancel and Default buttons often differentiate themselves visually from normal buttons. This would be a perfect usage of --modifierName */
+/* Default button style */
+.fa-Button--default
+  /* … */
+/* Cancel button style */
+.fa-Button--cancel
+  /* … */
+
+/* Core sidebar button */
+.fa-SidebarButton
+  /* … */
+/* Sidebar primary action button style */
+.fa-SidebarButton--primary
+  /* … */
+/* Sidebar secondary action button style */
+.fa-SidebarButton--secondary
+  /* … */
+```
+
+```html
+<button class="fa-Button fa-Button--default" type="button">…</button>
+
+<div class="fa-Sidebar">
+  <button class="fa-Button fa-Button--sidebarPrimary" type="button">
+    Save
+  </button>
+  <button class="fa-Button fa-Button--sidebarSecondary" type="button">
+    Print
+  </button>
+</div>
+```
+
+<a name="ComponentName-descendentName"></a>
+### ComponentName-descendentName
+
+A component descendent is a class that is attached to a descendent node of a
+component. It's responsible for applying presentation directly to the
+descendent on behalf of a particular component. Descendent names must be
+written in camel case.
+
+```html
+<article class="fa-Tweet">
+  <header class="fa-Tweet-header">
+    <img class="fa-Tweet-avatar" src="{{src}}" alt="{{alt}}">
+    …
+  </header>
+  <div class="fa-Tweet-bodyText">
+    …
+  </div>
+</article>
+```
+
+<a name="is-stateOfComponent"></a>
+### ComponentName.is-stateOfComponent
+
+Use `is-stateOfComponent` to reflect changes to a component's state, e.g. `is-expanded` or `is-loadingData`. The state name must be camel case. **Never style these classes directly; they should always be used as an adjoining class.**
+
+This means that the same state names can be used in multiple contexts, but
+every component must define its own styles for the state (as they are scoped to
+the component).
+
+```sass
+.fa-Tweet
+  /* … */
+.fa-Tweet.is-expanded
+  /* … */
+```
+
+```html
+<article class="fa-Tweet is-expanded">
+  …
+</article>
+```
+
 
 ## Tools and configuration
 
@@ -146,6 +302,11 @@ Use [compass' mixins][compass-mixins] for cross-browser support:
 - Sublime Text [Package Control settings][sublime-package-control] with some nice packages to have.
 
 ## ChangeLog
+
+#### 2015.05.22
+
+- Added CSS/SASS naming convention for components
+- Added SASS flexbox recomendations
 
 #### 2015.05.19
 
@@ -171,6 +332,11 @@ Use [compass' mixins][compass-mixins] for cross-browser support:
 [learning-javascript-design-patterns]:http://addyosmani.com/resources/essentialjsdesignpatterns/book/
 [jsdoc3]:https://github.com/jsdoc3/jsdoc
 [compass-mixins]:http://compass-style.org/index/mixins/
+[suitcss-naming-conventions]:https://github.com/suitcss/suit/blob/master/doc/naming-conventions.md
+[compass]:http://compass-style.org/
+[sass]:http://sass-lang.com/
+[flexbox-guide]:https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+[flexbox-mixins]:http://compass-style.org/reference/compass/css3/flexbox/#mixin-flexbox
 
 [jshint-file]:{{ site.baseurl }}{{ post.url }}/files/jshintrc
 [package-control-install]:https://packagecontrol.io/installation
