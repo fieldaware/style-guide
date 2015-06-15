@@ -32,7 +32,7 @@ Memory Management [keynote][memory-management-keynote] and [video][memory-manage
 - Write *TESTS*! Especially for your models.
 - Use compass mixins instead of multiple rules with browser prefixes.
 - Don't use `parseOnLoad`, parse small page sections instead.
-
+- Don't use declarative mode to instantiate dojo widgets. In case there's no alternative, define the value as an element property instead of an option of the data-dojo-props attribute.
 
 ## Performance Gotchas
 
