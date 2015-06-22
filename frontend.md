@@ -112,6 +112,62 @@ Object.keys(person).forEach(lang.hitch(this, function(prop){
 });
 ```
 
+### Object instantiation
+
+#### Avoid shared properties
+
+Initialize class properties in the constructor function to avoid shared properties across instances. See the example below:
+
+``` javascript
+// TestExample.js
+define([
+    'dojo/_base/declare'
+], function(declare){
+    var TestModel = declare([], {
+        a: [],
+        b: [],
+        constructor: function(){
+          this.a = [1,2,3];
+        }
+    });
+
+
+    return {
+        init: function(){
+            var t = new TestModel();
+            var t1 = new TestModel();
+
+            console.log(t.a,'=== [1, 2, 3]'); // [1, 2, 3] === [1, 2, 3]
+            console.log(t.b,'=== []'); // [] === []
+            // the issue is that property b is resolved from the
+            // __proto__ (parent) context.
+            console.log(t.__proto__.b, '=== []'); // [] === []
+            // but a is resolve from the instance itself
+            console.log(t.a, '=== [1,2,3]'); // [1,2,3] === [1,2,3]
+            // not from the parent context
+            console.log(t.__proto__.a, '=== [ ]'); // [] === []
+
+            // Saying that t and t1 should have the same data
+            console.log(t.a, '===', t1.a); // [1,2,3] === [1,2,3]
+            console.log(t.b, '===', t1.b); // [] === []
+
+            // So what happen if we modify the properties?
+
+            // If we modify property a of `t` then `t1`
+            // is not modified because we are changing the instance property.
+            t.a.push(4);
+            console.log(t.a, '!==', t1.a); // [1,2,3,4] !== [1,2,3]
+
+            // If we modify property b of `t` then `t1` is modified because
+            // b is a __proto__ property shared between all instances...
+            t.b.push(1);
+            console.log(t.b, '===', t1.b); // [1] === [1]
+        }
+    }
+});
+
+```
+
 ## CSS/SASS
 
 ### General
