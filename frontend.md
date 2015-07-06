@@ -102,14 +102,64 @@ Object.keys(person).forEach(function(prop){
     console.log("Person's " + prop + " is " + person[prop]);
 });
 
-// If you need access to the outer function's `this` context, you need
-// to use lang.hitch.
-// Note: ideally we'd defer to a function's `bind()` method, but
-// phantomjs 1.9.x doesn't support it.
-Object.keys(person).forEach(lang.hitch(this, function(prop){
+// You can even pass the loop a `this` context
+Object.keys(person).forEach(function(prop){
     console.log("Person's " + prop + " is " + person[prop]);
     console.log("Outer function's context:", this.my_parent_property);
+}, this);
+```
+
+#### short-circuiting
+
+```javascript
+// Old style for loop
+var found = false;
+for (var i = 0; !found && i < array.length; i++) {
+    found = (array[i] === 5);
+}
+
+// New declarative style
+var found = array.some(function(x) {
+    return (x === 5);
 });
+```
+
+#### for vs while
+
+In cases where looping functions from `Array.prototype` like the aforementioned
+are impractical and a plain loop is needed, prefer `for` loops over `while`
+loops if the number of iterations is known, e.g. when iterating over an array:
+
+```javascript
+// Short-circuited while loop
+var i = 0;
+var found = false;
+while (!found && i < array.length) {
+    found = (array[i] === 5);
+    i++;
+}
+
+console.log(found ? 'Found at index ' + (i - 1) : 'Not found');
+
+// For loops are more concise and capture the control logic in a single place,
+// making it harder to, say, forget to update the counter
+var found = false;
+for (var i = 0; !found && i < array.length; i++) {
+    found = (array[i] === 5);
+}
+
+// Contrary to languages with similar syntax, the counter variable has the same
+// scope as the loop, so this will work:
+console.log(found ? 'Found at index ' + (i - 1) : 'Not found');
+
+// Although this can, in fact, be written declaratively, the gain in clarity is
+// arguably little to none:
+var index = 0;
+found = array.some(function(x, i) {
+    return (x === 5) && ((index = i) === i);
+});
+
+console.log(found ? 'Found at index ' + index : 'Not found');
 ```
 
 ### Object instantiation
