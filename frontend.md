@@ -115,12 +115,12 @@ Object.keys(person).forEach(function(prop){
 // Old style for loop
 var found = false;
 for (var i = 0; !found && i < array.length; i++) {
-    found = (array[i] === 5);
+    found = array[i] === 5;
 }
 
 // New declarative style
 var found = array.some(function(x) {
-    return (x === 5);
+    return x === 5;
 });
 ```
 
@@ -135,7 +135,7 @@ loops if the number of iterations is known, e.g. when iterating over an array:
 var i = 0;
 var found = false;
 while (!found && i < array.length) {
-    found = (array[i] === 5);
+    found = array[i] === 5;
     i++;
 }
 
@@ -145,21 +145,12 @@ console.log(found ? 'Found at index ' + (i - 1) : 'Not found');
 // making it harder to, say, forget to update the counter
 var found = false;
 for (var i = 0; !found && i < array.length; i++) {
-    found = (array[i] === 5);
+    found = array[i] === 5;
 }
 
 // Contrary to languages with similar syntax, the counter variable has the same
 // scope as the loop, so this will work:
 console.log(found ? 'Found at index ' + (i - 1) : 'Not found');
-
-// Although this can, in fact, be written declaratively, the gain in clarity is
-// arguably little to none:
-var index = 0;
-found = array.some(function(x, i) {
-    return (x === 5) && ((index = i) === i);
-});
-
-console.log(found ? 'Found at index ' + index : 'Not found');
 ```
 
 ### Object instantiation
