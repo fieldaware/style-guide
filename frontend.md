@@ -168,6 +168,10 @@ define([
 
 ```
 
+### Using a ```FilteringSelect + QueryReadStore```
+Over the years, we've had no small amount of performance issues relating to the python implementation of ```FilteringSelect + QueryReadStore```combo. There is now a common utility python function that encpsulates most of the validation and business logic of ```FilteringSelect```. Function ```webapp/controllers/util.py:common_filtering_select_processor``` validates arguments and encapsulates searching, listing and paging functionality respecting the protocol of ```QueryReadStore```. Two things are noteworthy, 1. *always* introduced upper bounds in the python code, as ```QueryReadStore``` cannot be trusted and 2. there is a spurious query that occurs the very first time that a page containing the ```FilteringSelect``` widget is loaded and the ```FilteringSelect``` widget is clicked.
+
+
 ## CSS/SASS
 
 ### General
