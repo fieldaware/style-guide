@@ -217,7 +217,9 @@ Over the years, we've had no small amount of performance issues relating to the 
 
 ### General
 
-We use [compass][compass], which in turn uses [sass][sass]
+We use [compass][compass], which in turn uses [sass][sass].
+
+For icons, we use icomoon: you can see the [full set of available icons here](icomoon/demo.html).
 
 #### Flexbox for Layout & Flow
 
@@ -403,6 +405,10 @@ the component).
 - Sublime Text [Package Control settings][sublime-package-control] with some nice packages to have.
 
 ## ChangeLog
+
+#### 2015.08.13
+
+- Added link to icon list
 
 #### 2015.05.22
 
