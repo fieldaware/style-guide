@@ -37,7 +37,36 @@ Memory Management [keynote][memory-management-keynote] and [video][memory-manage
 ## Performance Gotchas
 
 - Minimize DOM manipulation, use an in memory DOM if necessary to minimize the performance issues related to DOM layout recalculation.
-- Use `lang.clone` just when it is strictly necessary, it can cause performance issues.
+- Clone just when it is strictly necessary, it can cause performance issues. If you need to clone objects use the `JSON.parse(JSON.stringify(object))` instead of `lang.clone(object)` as the performance of fhe first is around 3x better as you can see on the [Benchmarkjs](http://benchmarkjs.com/) test below:
+
+```
+require(['dojo/_base/lang', 'dojo/node!benchmark'], function(lang, Benchmark){
+    var suite = new Benchmark.Suite;
+
+    var o = {a: [1, 2, 3, 4, 5], b: {c: 1, d: [1, 2, 3, 4, 56, 7, 8]}};
+
+    // add tests
+    suite.add('JSON#clone', function() {
+        JSON.parse(JSON.stringify(o));
+    })
+    .add('Dojo#clone', function(){
+        lang.clone(o);
+    })
+    .on('cycle', function(event) {
+        console.log(String(event.target));
+    })
+    .on('complete', function() {
+      console.log('Fastest is ' + this.filter('fastest').pluck('name'));
+    })
+    .run({ 'async': true });
+});
+```
+> JSON#clone x 416,693 ops/sec ±1.86% (90 runs sampled)
+
+> Dojo#clone x 136,406 ops/sec ±1.97% (85 runs sampled)
+
+> Fastest is JSON#clone
+
 - Minimize the number of [delete statements][google-v8-optimizations] in order to prevent [performance issues][memory-management-keynote]:
 
   ``` javascript
@@ -405,6 +434,10 @@ the component).
 - Sublime Text [Package Control settings][sublime-package-control] with some nice packages to have.
 
 ## ChangeLog
+
+#### 2015.09.2
+
+- Extend clone description on performance gotchas section.
 
 #### 2015.08.13
 
