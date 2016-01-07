@@ -8,7 +8,7 @@ title: Python
 * Try to follow [PEP8](https://www.python.org/dev/peps/pep-0008/), except for line length. Use a linter (like [pylint](http://www.pylint.org/)) to enforce them automatically in your code.
 * Use full names for variables where possible. For example, choose `job` over `j`, `something_longer` over `sl`, but not `this_variable_name_is_the_longest_name_evar_celery_man`.
 * Functions and classes should have at least minimal docstrings. A good guide to write them can be found in [PEP 0257](https://www.python.org/dev/peps/pep-0257/).
-* No mutable default params please! No `def foo(bar={'my': 'default'}):` and no `def foo(bar=MyClass()):` (assuming the `MyClass` instance is mutable)
+* No [mutable default params](http://docs.python-guide.org/en/latest/writing/gotchas/#mutable-default-arguments) please! No `def foo(bar={'my': 'default'}):` and no `def foo(bar=MyClass()):` (assuming the `MyClass` instance is mutable)
 * For methods exposed to the outside world, especially exposed methods that read lists of data from the database, default limits should always be applied to prevent accidental or intentional DOS attacks. Such an example can be found in `webapp/controllers/locations.py:get_locations(..)`. Before its latest rewrite, it did not apply any bounds on the `count` argument, causing severe load issues on web application servers.
 
 # Syntax
