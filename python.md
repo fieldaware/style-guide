@@ -31,10 +31,74 @@ d = {
 }
 ```
 
-## Exception handling
+## [Declaring exceptions](https://stackoverflow.com/questions/1319615/proper-way-to-declare-custom-exceptions-in-modern-python/26938914#26938914)
+### The example
 
-* When raising exceptions, try to include enough information to help debugging: what was expected? What actually happened?
-* When writing controllers which handle a lot of Exceptions, try to encapsulate the logic within one `try..except`
+```
+class MyAppValueError(ValueError):
+    def __init__(self, foo, *args):
+        # Special attribute you desire with your Error,
+        # perhaps the value that caused the error?:
+        self.foo = foo
+
+        # Allow users initialize misc. arguments as any other builtin Error
+        super(MyAppValueError, self).__init__(message, foo, *args)
+```
+
+There's no need to write your own `__str__` or `__repr__`. The builtin ones
+are very nice.
+
+### The example, expanded
+
+**Name** your exceptions [in accordance with
+PEP8](https://www.python.org/dev/peps/pep-0008/#exception-names), i.e. use
+suffixes like `Error` or `Warning` where appropriate.
+
+Exception classes you declare **should inherit** (either directly or indirectly)
+from the `Exception` class.  If there's more that can be told about the nature
+of the exceptional situation, pick a more specific exception class to inherit
+from, from the hierarchy of [predefined exceptions](https://docs.python.org/2/library/exceptions.html#exception-hierarchy).
+
+The last parameter of `__init__()` method **should be `*args`** to allow for
+passing arbitrary number of arguments, which in turn are passed on to
+`super(...).__init__(..., *args)`.  That way, the Liskov Substitution
+Principle isn't violated between your exception class and the `Exception`
+class.
+
+**Avoid** passing human-readable messages to exception constructors, prefer
+passing problematic variable values instead and naming the exception class
+descriptively.  Rationale: Exceptions are entities belonging to the realm of
+the code, not to that of the users.  Users aren't being shown raw exceptions,
+they're being shown error messages which are an interpretation of caught
+exceptions.   There are considerations like localization and formatting of the
+message that need to be taken into account before showing a message to the
+user.  Trying to address such considerations at the point in code at which the
+exception is risen is simply impractical.  Therefore, put all the constituents
+of a good error message as exception class fields instead, and leave putting
+together the error message up to the handler of the exception.  How the error
+message will be presented depends on where the code will be used: Web
+application may need to present it differently than an API.
+
+```
+class MissingContactPhoneNumberError(Exception):
+    def __init__(self, contact_uuid, *args):
+	self.contact_uuid = contact_uuid
+        super(MissingContactPhoneNumberError, self).__init__(self.message, contact_uuid, *args)
+```
+
+and then at the exception handling point in code:
+
+```
+try:
+    [...]
+except MissingContactPhoneNumberError as e:
+    print "Contact lacks a phone number: {}".format(e.contact_uuid)
+```
+
+## Handling exceptions
+
+When writing controllers which handle a lot of Exceptions, try to encapsulate
+the logic within one `try..except`:
 
 ``` python
 try:
@@ -50,16 +114,17 @@ except JobDeleteFailedException as e:
 ```
 
 
-# ChangeLog
+**Avoid** extracting text from exceptions messages &mdash; there's usually
+some other way:
 
-#### 2015.07.08
+```
+try:
+    [...]
+    DBSession.flush()  # tease out database integrity constraint errors
+except IntegrityError as e:
+    if "name" in e.message:
+	raise CFSValidationError("DUPLICATE NAME",
+				    "Duplicate name {!r}".format(cfd.name))
+```
 
-- Added mention of applying limits
-
-#### 2015.06.22
-
-- Added tip: No mutable default params please
-
-#### 2015.05.20
-
-- Initial Draft
+It has a potential to fail tests when a message text is changed.
