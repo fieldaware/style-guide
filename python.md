@@ -128,3 +128,42 @@ except IntegrityError as e:
 ```
 
 It has a potential to fail tests when a message text is changed.
+
+
+## SQL string interpolation
+
+In those occasions where a database query cannot be performed using SQLAlchemy
+statements, and you need to run an SQL query using `DBSession.execute`, try to
+use [SQLAlchemy string interpolation](http://docs.sqlalchemy.org/en/latest/orm/session_api.html#sqlalchemy.orm.session.Session.execute).
+For table and column names you'll still need to format the query manually, though.
+
+The following example shows a combination of both approaches:
+```
+DBSession.execute(
+    "DELETE /* rid={rid} */ FROM {table} WHERE {filter}=:scope_val LIMIT :size"
+    .format(rid=CURRENT.request_id(), table=klass.__tablename__, filter=filter_name), {
+        "scope_val": scope_val,
+        "size": chunk_size,
+    }
+)
+```
+
+If the query doesn't take any values, you can still ensure correctness by
+wrapping the query with `sqlalchemy.text`:
+
+```
+from sqlalchemy import text
+
+DBSession.execute(
+    text("""INSERT INTO {table} VALUES(:business_ref, :name, LAST_INSERT_ID(1 + :inc), version) """)
+)
+```
+
+As counter example, this is what we should try to avoid in order to prevent SQL Injection issues:
+
+```
+# 5 could have been some external input
+result = session.execute(
+            "SELECT * FROM user WHERE id={}".format(5)
+        )
+```
